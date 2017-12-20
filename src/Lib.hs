@@ -72,10 +72,24 @@ instance Num (Stream Integer) where
   (*) (Cons x xs) sc@(Cons y ys) = Cons (x*y) (streamMap (*x) ys + (xs * sc))
 
 instance Fractional (Stream Integer) where
-  (/) (Cons x xs) (Cons y ys) = m
+  (/) (Cons a as) (Cons b bs) = m
     where
-      m = Cons (x `div` y) (streamMap (`div` y) (xs - m * ys))
+      m = Cons (a `div` b) (streamMap (`div` b) (as - m * bs))
 
 fibs3 :: Stream Integer
 fibs3 = x/(1-x-x*x)
 
+-- Problem 7 ---------------------------------------------------------
+----------------------------------------------------------------------
+data Matrix = Matrix Integer Integer Integer Integer
+    deriving (Eq,Show)
+
+instance Num Matrix where
+  (*) (Matrix a b c d) (Matrix m n l p)= (Matrix (a*m+b*l) (a*n+b*p)
+                                              (c*m+d*l) (c*n+d*p))
+
+fib4 :: Integer -> Integer
+fib4 n = get $ m^n
+  where
+    m = Matrix 1 1 1 0
+    get (Matrix _ l _ _) = l
